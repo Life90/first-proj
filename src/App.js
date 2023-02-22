@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import { useState, useEffect } from "react";
 
 function App() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch("https://api.github.com/users/vampaynani/repos")
+      .then((response) => response.json())
+      .then((data) => setUsers(data))
+      .catch((error) => console.log("You encountered an error", error));
+  }, []);
+
+  const sortedData = users.sort((a, b) => (a.id > b.id ? 1 : -1));
+  console.log(sortedData);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {sortedData.map((user) => {
+        return <h1 key={user.id}>{user.name}</h1>;
+      })}
     </div>
   );
 }
-
 export default App;
